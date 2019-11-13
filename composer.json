@@ -9,6 +9,11 @@
             "email": "taras.chr@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Lightweight\\Entity\\Manager": "src/"
+        }
+    },
     "minimum-stability": "stable",
     "require": {}
 }
