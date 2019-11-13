@@ -3,6 +3,7 @@
     "description": "Simple Entity Manager for mapping your data with classes",
     "type": "library",
     "license": "MIT",
+    "version": "0.0.1-dev",
     "authors": [
         {
             "name": "Taras Chornyi",
@@ -11,9 +12,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Lightweight\\Entity\\Manager": "src/"
+            "EntityManager\\": "src/"
         }
     },
-    "minimum-stability": "stable",
-    "require": {}
+    "minimum-stability": "dev",
+    "require": {
+        "doctrine/collections": "^1.6",
+        "doctrine/annotations": "^2.0@dev"
+    }
 }
