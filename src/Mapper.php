@@ -5,6 +5,7 @@ namespace EntityManager;
 
 use Doctrine\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
+use function is_callable;
 use function ucfirst;
 
 class Mapper

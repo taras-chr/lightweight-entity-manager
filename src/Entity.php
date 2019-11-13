@@ -3,7 +3,7 @@
 namespace EntityManager;
 
 /**
- * Plain interface for better type safety
+ * Empty interface just for better type safety
  * Entity properties MUST be private only
  * @package EntityManager
  */
