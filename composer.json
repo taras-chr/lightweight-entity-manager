@@ -18,6 +18,7 @@
     "minimum-stability": "dev",
     "require": {
         "doctrine/collections": "^1.6",
-        "doctrine/annotations": "^2.0@dev"
+        "doctrine/annotations": "^2.0@dev",
+        "symfony/var-dumper": "^5.0@dev"
     }
 }
