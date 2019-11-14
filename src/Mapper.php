@@ -17,7 +17,7 @@ interface Mapper
     /**
      * Result of mapper process returned in this method
      * It can be used anywhere
-     * @return mixed
+     * @return \EntityManager\Entity|\EntityManager\Entity[]|array<\EntityManager\Entity>
      */
     public function getMapped();
 }

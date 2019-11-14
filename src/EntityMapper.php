@@ -145,7 +145,7 @@ class EntityMapper
      * Map for list of collection
      * Returns array of entities
      *
-     * @return Entity[]
+     * @return \EntityManager\Entity[]
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
      * @throws EntityManagerException
@@ -162,11 +162,12 @@ class EntityMapper
     /**
      * Get just one entity as result
      *
+     * @return \EntityManager\Entity
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
      * @throws EntityManagerException
      */
-    public function mapSingle()
+    public function mapSingle(): \EntityManager\Entity
     {
         $this->processCollectionToEntity($this->collection, $this->entity);
         return array_shift($this->mapped);
