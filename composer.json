@@ -20,8 +20,8 @@
             "EntityManager\\Example\\": "example/"
         }
     },
-    "minimum-stability": "dev",
     "require": {
+        "php": "^7.1",
         "doctrine/collections": "^1.6",
         "doctrine/annotations": "^2.0@dev"
     },
