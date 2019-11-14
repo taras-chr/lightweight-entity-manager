@@ -18,4 +18,4 @@ foreach ($countryCodes as $countryCode) {
     $countries[] = $country->getMapped();
 }
 
-dd($countries);
+var_dump($countries);
