@@ -10,6 +10,7 @@
             "email": "taras.chr@gmail.com"
         }
     ],
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "EntityManager\\": "src/"
