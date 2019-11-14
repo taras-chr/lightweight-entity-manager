@@ -9,7 +9,7 @@ use function in_array;
 use function is_callable;
 use function ucfirst;
 
-class EntityMapper
+final class EntityMapper
 {
     /**
      * @var ArrayCollection
@@ -100,7 +100,7 @@ class EntityMapper
      * @return mixed
      * @throws EntityManagerException
      */
-    public function validateValue(AnnotationReader $annotationReader, \ReflectionProperty $property, $value)
+    private function validateValue(AnnotationReader $annotationReader, \ReflectionProperty $property, $value)
     {
         /** @var Property|null $annotation */
         $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);

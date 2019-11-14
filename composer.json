@@ -21,6 +21,8 @@
         "doctrine/annotations": "^2.0@dev"
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.0@dev"
+        "symfony/var-dumper": "^5.0@dev",
+        "phpunit/phpunit": "^8",
+        "phpunit/php-invoker": "^2.0@dev"
     }
 }
