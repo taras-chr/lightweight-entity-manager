@@ -17,3 +17,5 @@ foreach ($countryCodes as $countryCode) {
     $country = new CountryMapper($collection);
     $countries[] = $country->getMapped();
 }
+
+dd($countries);
