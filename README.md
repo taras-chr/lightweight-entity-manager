@@ -1,6 +1,6 @@
 ## Lightweight Entity Manager
 
-Array data mapper to class entities library
+Mapper for arrays into class entities
 
 ### Examples
 
