@@ -1,9 +1,9 @@
 {
     "name": "taras-chr/lightweight-entity-manager",
-    "description": "Simple Entity Manager for mapping your data with classes",
+    "description": "Lightweight entity manager for mapping your data into classes",
     "type": "library",
     "license": "MIT",
-    "version": "0.0.1-dev",
+    "version": "0.1.0-dev",
     "authors": [
         {
             "name": "Taras Chornyi",
