@@ -28,7 +28,7 @@ class EntityMapper
     private $subMapper = [];
 
     /**
-     * @var array<Entity>
+     * @var array<\EntityManager\Entity>|\EntityManager\Entity[]
      */
     private $mapped = [];
 
@@ -170,7 +170,7 @@ class EntityMapper
     public function mapSingle(): \EntityManager\Entity
     {
         $this->processCollectionToEntity($this->collection, $this->entity);
-        return array_shift($this->mapped);
+        return !empty($this->mapped) ? $this->mapped[0] : $this->entity;
     }
 
     /**
