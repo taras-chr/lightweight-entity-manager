@@ -133,7 +133,6 @@ class EntityMapper
     /**
      * @param ArrayCollection $collection
      * @param Entity $entity
-     * @return array
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
      */
