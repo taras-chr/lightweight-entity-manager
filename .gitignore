@@ -1,7 +1,0 @@
-.idea
-.phan
-src/Example
-tests
-vendor
-index.php
-composer.lock
