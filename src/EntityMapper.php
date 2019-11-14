@@ -114,11 +114,7 @@ class EntityMapper
     public function mapList(): array
     {
         foreach ($this->collection as $item) {
-            if ($item instanceof ArrayCollection) {
-                $this->map($item, $this->entity);
-            } elseif (is_array($item)) {
-                $this->map(new ArrayCollection($item), $this->entity);
-            }
+            $this->processCollectionToEntity($item, $this->entity);
         }
 
         return $this->mapped;
@@ -130,13 +126,24 @@ class EntityMapper
      */
     public function mapSingle()
     {
+        $this->processCollectionToEntity($this->collection, $this->entity);
+        return array_shift($this->mapped);
+    }
+
+    /**
+     * @param ArrayCollection $collection
+     * @param Entity $entity
+     * @return array
+     * @throws \Doctrine\Annotations\AnnotationException
+     * @throws \ReflectionException
+     */
+    private function processCollectionToEntity(ArrayCollection $collection, Entity $entity)
+    {
         if ($this->collection instanceof ArrayCollection) {
             $this->map($this->collection, $this->entity);
         } elseif (is_array($this->collection)) {
             $this->map(new ArrayCollection($this->collection), $this->entity);
         }
-
-        return array_shift($this->mapped);
     }
 
     /**
