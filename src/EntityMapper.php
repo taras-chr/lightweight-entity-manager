@@ -78,8 +78,7 @@ class EntityMapper
 
             if (in_array($fieldName, $collectionProperties, true)) {
                 $setterMethod = 'set' . ucfirst($propertyName);
-                $value = $collection->get($fieldName);
-                $value = $this->validateValue($annotationReader, $property, $value);
+                $value = $this->validateValue($annotationReader, $property, $collection->get($fieldName));
 
                 if (isset($this->subMapper[$propertyName]) && $this->subMapper[$propertyName] instanceof Mapper) {
                     $value = $this->bindSubMapper($this->subMapper[$propertyName], $value, $propertyName);
