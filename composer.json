@@ -17,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EntityManager\\Example\\": "Example"
+            "EntityManager\\Example\\": "example/"
         }
     },
     "minimum-stability": "dev",
