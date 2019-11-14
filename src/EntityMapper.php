@@ -33,6 +33,11 @@ class EntityMapper
     private $mapped = [];
 
     /**
+     * @var array<string,mixed>
+     */
+    private $bindings = [];
+
+    /**
      * Mapper constructor.
      * @param ArrayCollection $collection
      * @param Entity $entity
@@ -71,15 +76,15 @@ class EntityMapper
             $propertyName = $property->getName();
 
             if (in_array($fieldName, $collectionProperties, true)) {
-                $methodName = 'set' . ucfirst($propertyName);
+                $setterMethod = 'set' . ucfirst($propertyName);
                 $value = $collection->get($fieldName);
 
                 if (isset($this->subMapper[$propertyName]) && $this->subMapper[$propertyName] instanceof Mapper) {
                     $value = $this->bindSubMapper($this->subMapper[$propertyName], $value, $propertyName);
                 }
 
-                if (is_callable([$entity, $methodName])) {
-                    $entity->$methodName($value);
+                if (is_callable([$entity, $setterMethod])) {
+                    $entity->$setterMethod($value);
                 }
             }
         }
@@ -138,10 +143,16 @@ class EntityMapper
      */
     private function processCollectionToEntity($collection, Entity $entity)
     {
+        $object = null;
         if ($collection instanceof ArrayCollection) {
-            $this->map($collection, $entity);
+            $object = $collection;
         } elseif (is_array($collection)) {
-            $this->map(new ArrayCollection($collection), $entity);
+            $object = new ArrayCollection($collection);
+        }
+
+        if($object) {
+            $object = $this->setBindings($object);
+            $this->map($object, $entity);
         }
     }
 
@@ -176,5 +187,30 @@ class EntityMapper
         }
 
         return $fieldName;
+    }
+
+    /**
+     * @param string $property
+     * @param mixed $value
+     * @return EntityMapper
+     */
+    public function bindProperty(string $property, $value): EntityMapper
+    {
+        $this->bindings[$property] = $value;
+        return $this;
+    }
+
+    /**
+     * @param ArrayCollection $collection
+     * @return ArrayCollection
+     */
+    private function setBindings(ArrayCollection $collection): ArrayCollection
+    {
+        if(!empty($this->bindings)) {
+            foreach ($this->bindings as $key => $value) {
+                $collection->set($key, $value);
+            }
+        }
+        return $collection;
     }
 }
