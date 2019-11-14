@@ -104,11 +104,11 @@ final class EntityMapper
     {
         /** @var Property|null $annotation */
         $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);
-        if($annotation && $annotation->validator) {
-            if(class_exists($annotation->validator)) {
+        if ($annotation && $annotation->validator) {
+            if (class_exists($annotation->validator)) {
                 /** @var Validator $validator */
                 $validator = new $annotation->validator($value);
-                if(!$validator->isValid()) {
+                if (!$validator->isValid()) {
                     throw new EntityManagerException("Invalid property value in {$property->getDeclaringClass()->getName()}::\${$property->getName()} (validated by {$annotation->validator})");
                 }
                 $value = $validator->getValue();
@@ -188,7 +188,7 @@ final class EntityMapper
             $object = new ArrayCollection($collection);
         }
 
-        if($object) {
+        if ($object) {
             $object = $this->setBindings($object);
             $this->map($object, $entity);
         }
@@ -241,7 +241,7 @@ final class EntityMapper
      */
     private function setBindings(ArrayCollection $collection): ArrayCollection
     {
-        if(!empty($this->bindings)) {
+        if (!empty($this->bindings)) {
             foreach ($this->bindings as $key => $value) {
                 $collection->set($key, $value);
             }

@@ -21,5 +21,11 @@ final class Property
      */
     public $field;
 
+    /**
+     * Specify own validation rules for property
+     * Validators must implement Validator interface
+     * @example: @Property(validator=MyValidator::class)
+     * @var string
+     */
     public $validator;
 }
