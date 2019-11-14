@@ -9,7 +9,8 @@ interface Mapper
     /**
      * Receive your collection in this method
      * You can work with collection in any other method only through this
-     * Sub mappers set collection to this method automatically
+     * Sub mappers sets collection to this method automatically
+     *
      * @param ArrayCollection $collection
      */
     public function setCollection(ArrayCollection $collection);
