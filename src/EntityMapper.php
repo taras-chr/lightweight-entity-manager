@@ -131,17 +131,17 @@ class EntityMapper
     }
 
     /**
-     * @param ArrayCollection $collection
+     * @param ArrayCollection|array $collection
      * @param Entity $entity
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    private function processCollectionToEntity(ArrayCollection $collection, Entity $entity)
+    private function processCollectionToEntity($collection, Entity $entity)
     {
-        if ($this->collection instanceof ArrayCollection) {
-            $this->map($this->collection, $this->entity);
-        } elseif (is_array($this->collection)) {
-            $this->map(new ArrayCollection($this->collection), $this->entity);
+        if ($collection instanceof ArrayCollection) {
+            $this->map($collection, $entity);
+        } elseif (is_array($collection)) {
+            $this->map(new ArrayCollection($collection), $entity);
         }
     }
 
