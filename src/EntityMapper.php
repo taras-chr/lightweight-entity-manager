@@ -28,7 +28,7 @@ class EntityMapper
     private $subMapper = [];
 
     /**
-     * @var array
+     * @var array<Entity>
      */
     private $mapped = [];
 
@@ -63,6 +63,7 @@ class EntityMapper
      * @param Entity $entity
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
+     * @throws EntityManagerException
      */
     private function map(ArrayCollection $collection, Entity $entity)
     {
@@ -78,6 +79,7 @@ class EntityMapper
             if (in_array($fieldName, $collectionProperties, true)) {
                 $setterMethod = 'set' . ucfirst($propertyName);
                 $value = $collection->get($fieldName);
+                $value = $this->validateValue($annotationReader, $property, $value);
 
                 if (isset($this->subMapper[$propertyName]) && $this->subMapper[$propertyName] instanceof Mapper) {
                     $value = $this->bindSubMapper($this->subMapper[$propertyName], $value, $propertyName);
@@ -93,6 +95,34 @@ class EntityMapper
     }
 
     /**
+     * @param AnnotationReader $annotationReader
+     * @param \ReflectionProperty $property
+     * @param $value
+     * @return mixed
+     * @throws EntityManagerException
+     */
+    public function validateValue(AnnotationReader $annotationReader, \ReflectionProperty $property, $value)
+    {
+        /** @var Property|null $annotation */
+        $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);
+        if($annotation && $annotation->validator) {
+            if(class_exists($annotation->validator)) {
+                /** @var Validator $validator */
+                $validator = new $annotation->validator($value);
+                if(!$validator->isValid()) {
+                    throw new EntityManagerException("Invalid property value in {$property->getDeclaringClass()->getName()}::\${$property->getName()} (validated by {$annotation->validator})");
+                }
+                $value = $validator->getValue();
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * Bind property with other sub mapper
+     * It can be endless chain of sub mappers
+     * Main process will be finished only after processed sub mappers
+     *
      * @param Mapper $mapper
      * @param $value
      * @param string $property
@@ -112,9 +142,13 @@ class EntityMapper
     }
 
     /**
+     * Map for list of collection
+     * Returns array of entities
+     *
      * @return Entity[]
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
+     * @throws EntityManagerException
      */
     public function mapList(): array
     {
@@ -126,8 +160,11 @@ class EntityMapper
     }
 
     /**
+     * Get just one entity as result
+     *
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
+     * @throws EntityManagerException
      */
     public function mapSingle()
     {
@@ -140,6 +177,7 @@ class EntityMapper
      * @param Entity $entity
      * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
+     * @throws EntityManagerException
      */
     private function processCollectionToEntity($collection, Entity $entity)
     {
@@ -175,12 +213,9 @@ class EntityMapper
     private function getFieldName(\ReflectionProperty $property, AnnotationReader $annotationReader): string
     {
         /** @var Property|null $annotation */
-        $annotation = $annotationReader->getPropertyAnnotation(
-            $property,
-            Property::class
-        );
+        $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);
 
-        if ($annotation) {
+        if ($annotation && $annotation->field) {
             $fieldName = $annotation->field;
         } else {
             $fieldName = $property->getName();

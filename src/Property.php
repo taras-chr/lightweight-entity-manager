@@ -12,7 +12,14 @@ namespace EntityManager;
 final class Property
 {
     /**
+     * You can map property with field of collection if names is different
+     * Just specify annotation with field name in collection before entity property
+     * It will automatically map property with that field
+     * @example: @Property(field=my_field)
+     *
      * @var string
      */
     public $field;
+
+    public $validator;
 }
