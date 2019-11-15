@@ -18,7 +18,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EntityManager\\Example\\": "example/"
+            "EntityManager\\Example\\": "example/",
+            "EntityManager\\Tests\\": "tests/"
         }
     },
     "require": {

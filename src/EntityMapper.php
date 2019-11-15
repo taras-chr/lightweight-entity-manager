@@ -236,6 +236,19 @@ final class EntityMapper
     }
 
     /**
+     * Alias method for EntityMapper::bindProperty()
+     * Requires Mapper as second parameter
+     * @param string $property
+     * @param Mapper $mapper
+     * @return EntityMapper
+     */
+    public function bindPropertyWithMapper(string $property, Mapper $mapper): EntityMapper
+    {
+        $this->bindProperty($property, $mapper);
+        return $this;
+    }
+
+    /**
      * @param ArrayCollection $collection
      * @return ArrayCollection
      */
@@ -243,6 +256,11 @@ final class EntityMapper
     {
         if (!empty($this->bindings)) {
             foreach ($this->bindings as $key => $value) {
+                if($value instanceof Mapper) {
+                    $value->setCollection($collection);
+                    $collection->set($key, $value->getMapped());
+                    continue;
+                }
                 $collection->set($key, $value);
             }
         }

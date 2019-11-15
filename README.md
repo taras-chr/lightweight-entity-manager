@@ -120,6 +120,10 @@ use EntityManager\EntityMapper;
 use EntityManager\Example\Entity\User;
 use EntityManager\Mapper;
 
+/**
+ * Mapper not need constructor by default
+ * You can use Mapper constructor freely for your goals
+ */
 class UserMapper implements Mapper
 {
     /**
@@ -128,9 +132,9 @@ class UserMapper implements Mapper
     private $collection;
 
     /**
-     * Required method from inteface
+     * Required method from interface
      * Of course you can create constructor and initialize mapper with collection
-     * But this method is using by mapping process
+     * This method is using by mapping process
      * @inheritDoc
      */
     public function setCollection(ArrayCollection $collection)
@@ -161,6 +165,11 @@ class UserMapper implements Mapper
              * Useful if need to add some data that not provided by collection
              */
             ->bindProperty('otherField', 'Some information than not received from collection')
+            /**
+             * Alternatively you can bind that field with other mapper
+             * Mapper receives current collection item 
+             */
+            ->bindPropertyWithMapper('otherField', new SomeOtherMapper())
             /**
              * Use mapSingle() if need to process just one entity
              * Use mapList() if need to process list of data (collections), e.g array of users
