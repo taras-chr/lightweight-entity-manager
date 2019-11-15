@@ -16,8 +16,8 @@ interface Validator
     public function __construct($value);
 
     /**
-     * Set logic result of validator
-     * If false will be thrown EntityManagerException
+     * Set logical result of validator
+     * If false it will be thrown EntityManagerException
      * @return bool
      */
     public function isValid(): bool;

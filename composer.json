@@ -10,7 +10,7 @@
             "email": "taras.chr@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "EntityManager\\": "src/"
@@ -22,9 +22,9 @@
         }
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "doctrine/collections": "^1.6",
-        "doctrine/annotations": "^1.8"
+        "doctrine/annotations": "^2.0@dev"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.0@dev",

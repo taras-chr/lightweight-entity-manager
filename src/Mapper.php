@@ -20,7 +20,7 @@ interface Mapper
      * It can be used anywhere
      * Don't mind if PHPStorm shows you an error when you return child of Entity instead of \EntityManager\Entity
      *
-     * @return \EntityManager\Entity|\EntityManager\Entity[]|array<\EntityManager\Entity>
+     * @return \EntityManager\Entity|\EntityManager\Entity[]|array<\EntityManager\Entity>|mixed
      */
     public function getMapped();
 }
