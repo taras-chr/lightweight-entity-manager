@@ -1,4 +1,4 @@
-## Lightweight Entity Manager
+# Lightweight Entity Manager
 
 Simple mapper library for converting an array to a class object (entity) with your structure. 
 Work with any data as object models.
@@ -6,7 +6,7 @@ Work with any data as object models.
 ### Installation
 `composer require taras-chr/lightweight-entity-manager`
 
-### Usage
+## Usage
 Create object model with desired structure. 
 * All properties must be private
 * Property names must match with array keys (or you can bind that by annotation)
