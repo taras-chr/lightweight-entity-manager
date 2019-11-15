@@ -142,7 +142,7 @@ class UserMapper implements Mapper
      * Return result of mapping
      * @inheritDoc
      */
-    public function getMapped()
+    public function getMapped(): User
     {
         /**
          * Pass collection and instance of desired entity
@@ -270,6 +270,18 @@ class CountryNameValidator implements Validator
         return str_replace('a', 'b', $this->value);
     }
 }
+```
+
+As result you can use it anywhere
+```php
+<?php
+// ...
+$collection = new ArrayCollection(['id' => 1, 'name' => 'John Doe', 'birthday' => '01.01.1970']);
+$user = (new UserMapper($collection))->getMapped();
+echo $user->getName();
+echo "\n";
+echo $user->getBirthday()->format('m/d/Y');
+// ...
 ```
 ### More examples
 

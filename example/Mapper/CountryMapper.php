@@ -23,7 +23,7 @@ class CountryMapper implements Mapper
         $this->setCollection($collection);
     }
 
-    /**облемой.
+    /**
      * @param ArrayCollection $collection
      */
     public function setCollection(ArrayCollection $collection)
