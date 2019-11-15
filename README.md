@@ -145,7 +145,7 @@ class UserMapper implements Mapper
     public function getMapped()
     {
         /**
-         * Pass collection with instance of desired entity
+         * Pass collection and instance of desired entity
          */
         return EntityMapper::createFrom(
             $this->collection,
