@@ -3,7 +3,6 @@
     "description": "Lightweight entity manager for mapping your data into classes",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "Taras Chornyi",
