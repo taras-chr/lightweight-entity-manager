@@ -9,7 +9,7 @@
             "email": "taras.chr@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "EntityManager\\": "src/"
@@ -22,13 +22,14 @@
         }
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "doctrine/collections": "^1.6",
-        "doctrine/annotations": "^2.0@dev"
+        "doctrine/annotations": "^1"
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.0@dev",
-        "phpunit/phpunit": "^8",
-        "phpunit/php-invoker": "^2.0@dev"
-    }
+        "symfony/var-dumper": "^5",
+        "phpunit/phpunit": "^9",
+        "phpunit/php-invoker": "^3"
+    },
+    "prefer-stable": true
 }

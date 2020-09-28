@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EntityManager\Example\Mapper;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,7 +28,7 @@ class CountryMapper implements Mapper
     /**
      * @param ArrayCollection $collection
      */
-    public function setCollection(ArrayCollection $collection)
+    public function setCollection(ArrayCollection $collection): void
     {
         $this->collection = $collection;
     }
@@ -35,15 +37,14 @@ class CountryMapper implements Mapper
      * @inheritDoc
      * @noinspection PhpIncompatibleReturnTypeInspection
      * @return Country
-     * @throws \Doctrine\Annotations\AnnotationException
      * @throws \EntityManager\EntityManagerException
      * @throws \ReflectionException
      */
     public function getMapped(): Country
     {
         return EntityMapper::createFrom($this->collection, new Country())
-            ->setSubMapper('currency', new CurrencyMapper())
-            ->setSubMapper('coordinates', new CoordinatesMapper())
+            ->setNestedMapper('currency', new CurrencyMapper())
+            ->setNestedMapper('coordinates', new CoordinatesMapper())
             ->mapSingle();
     }
 }

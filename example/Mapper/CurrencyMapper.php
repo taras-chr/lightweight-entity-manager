@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EntityManager\Example\Mapper;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +26,6 @@ class CurrencyMapper implements Mapper
 
     /**
      * @return Currency[]
-     * @throws \Doctrine\Annotations\AnnotationException
      * @throws \ReflectionException
      * @throws \EntityManager\EntityManagerException
      */

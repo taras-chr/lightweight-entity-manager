@@ -1,7 +1,9 @@
 # Lightweight Entity Manager
 
 Simple mapper library for converting an array to a class object (entity) with your structure. 
-It help to represent array data as structured object.
+It helps to represent array data as structured object. 
+
+Can be useful for representing API responses/requests or for work with the database without ORM abstraction layers to control on type safety.
 
 ### Installation
 `composer require taras-chr/lightweight-entity-manager`
@@ -159,7 +161,7 @@ class UserMapper implements Mapper
              * You can add some sub mappers for entity properties
              * As example if you need transform some field from array to child Entity or DateTime as in this case
              */
-            ->setSubMapper('birthday', new UserBirthDayMapper())
+            ->setNestedMapper('birthday', new UserBirthDayMapper())
             /**
              * It is exists ability to bind some other property with entity
              * Useful if need to add some data that not provided by collection

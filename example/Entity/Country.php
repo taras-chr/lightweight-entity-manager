@@ -39,7 +39,7 @@ class Country implements Entity
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -63,7 +63,7 @@ class Country implements Entity
     /**
      * @param string $capital
      */
-    public function setCapital(string $capital)
+    public function setCapital(string $capital): void
     {
         $this->capital = $capital;
     }
@@ -79,7 +79,7 @@ class Country implements Entity
     /**
      * @param Currency[] $currency
      */
-    public function setCurrency(array $currency)
+    public function setCurrency(array $currency): void
     {
         $this->currency = $currency;
     }
@@ -95,7 +95,7 @@ class Country implements Entity
     /**
      * @param Coordinates $coordinates
      */
-    public function setCoordinates(Coordinates $coordinates)
+    public function setCoordinates(Coordinates $coordinates): void
     {
         $this->coordinates = $coordinates;
     }
@@ -111,7 +111,7 @@ class Country implements Entity
     /**
      * @param string $nativeName
      */
-    public function setNativeName(string $nativeName)
+    public function setNativeName(string $nativeName): void
     {
         $this->nativeName = $nativeName;
     }

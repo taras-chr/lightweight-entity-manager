@@ -1,0 +1,4 @@
+/.phan
+/.idea
+/vendor
+composer.lock

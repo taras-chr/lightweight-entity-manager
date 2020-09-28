@@ -3,8 +3,13 @@ declare(strict_types=1);
 
 namespace EntityManager;
 
-use Doctrine\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionProperty;
+
+use function class_exists;
 use function in_array;
 use function is_callable;
 use function ucfirst;
@@ -25,10 +30,10 @@ final class EntityMapper
      * @var array<string,Mapper>
      * @var Mapper[]
      */
-    private $subMapper = [];
+    private $nestedMapper = [];
 
     /**
-     * @var array<\EntityManager\Entity>|\EntityManager\Entity[]
+     * @var array<\EntityManager\Entity>|Entity[]
      */
     private $mapped = [];
 
@@ -61,14 +66,13 @@ final class EntityMapper
     /**
      * @param ArrayCollection $collection
      * @param Entity $entity
-     * @throws \Doctrine\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws EntityManagerException
      */
-    private function map(ArrayCollection $collection, Entity $entity)
+    private function map(ArrayCollection $collection, Entity $entity): void
     {
-        $entityReflection = new \ReflectionClass($entity);
-        $entityProperties = $entityReflection->getProperties(\ReflectionProperty::IS_PRIVATE);
+        $entityReflection = new ReflectionClass($entity);
+        $entityProperties = $entityReflection->getProperties(ReflectionProperty::IS_PRIVATE);
         $collectionProperties = $collection->getKeys();
         $annotationReader = new AnnotationReader();
 
@@ -80,8 +84,8 @@ final class EntityMapper
                 $setterMethod = 'set' . ucfirst($propertyName);
                 $value = $this->validateValue($annotationReader, $property, $collection->get($fieldName));
 
-                if (isset($this->subMapper[$propertyName]) && $this->subMapper[$propertyName] instanceof Mapper) {
-                    $value = $this->bindSubMapper($this->subMapper[$propertyName], $value, $propertyName);
+                if (isset($this->nestedMapper[$propertyName]) && $this->nestedMapper[$propertyName] instanceof Mapper) {
+                    $value = $this->bindNestedMapper($this->nestedMapper[$propertyName], $value, $propertyName);
                 }
 
                 if (is_callable([$entity, $setterMethod])) {
@@ -94,40 +98,41 @@ final class EntityMapper
     }
 
     /**
+     * Runs field validator if it expected
+     * Or returns "raw" value
+     *
      * @param AnnotationReader $annotationReader
-     * @param \ReflectionProperty $property
+     * @param ReflectionProperty $property
      * @param $value
      * @return mixed
      * @throws EntityManagerException
      */
-    private function validateValue(AnnotationReader $annotationReader, \ReflectionProperty $property, $value)
+    private function validateValue(AnnotationReader $annotationReader, ReflectionProperty $property, $value)
     {
         /** @var Property|null $annotation */
         $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);
-        if ($annotation && $annotation->validator) {
-            if (class_exists($annotation->validator)) {
-                /** @var Validator $validator */
-                $validator = new $annotation->validator($value);
-                if (!$validator->isValid()) {
-                    throw new EntityManagerException("Invalid property value in {$property->getDeclaringClass()->getName()}::\${$property->getName()} (validated by {$annotation->validator})");
-                }
-                $value = $validator->getValue();
+        if ($annotation && $annotation->validator && class_exists($annotation->validator)) {
+            /** @var Validator $validator */
+            $validator = new $annotation->validator($value);
+            if (!$validator->isValid()) {
+                throw new EntityManagerException("Invalid property value in {$property->getDeclaringClass()->getName()}::\${$property->getName()} (validated by {$annotation->validator})");
             }
+            $value = $validator->getValue();
         }
         return $value;
     }
 
     /**
-     * Bind property with other sub mapper
-     * It can be endless chain of sub mappers
-     * Main process will be finished only after processed sub mappers
+     * Bind property with other nested mapper
+     * It can be endless chain of nested mappers
+     * Main process will be finished only after processed nested mappers
      *
      * @param Mapper $mapper
      * @param $value
      * @param string $property
      * @return mixed
      */
-    private function bindSubMapper(Mapper $mapper, $value, string $property)
+    private function bindNestedMapper(Mapper $mapper, $value, string $property)
     {
         if ($value instanceof ArrayCollection) {
             $mapper->setCollection($value);
@@ -144,9 +149,8 @@ final class EntityMapper
      * Map for list of collection
      * Returns array of entities
      *
-     * @return \EntityManager\Entity[]
-     * @throws \Doctrine\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @return Entity[]
+     * @throws ReflectionException
      * @throws EntityManagerException
      */
     public function mapList(): array
@@ -161,25 +165,25 @@ final class EntityMapper
     /**
      * Get just one entity as result
      *
-     * @return \EntityManager\Entity
-     * @throws \Doctrine\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @return Entity
+     * @throws ReflectionException
      * @throws EntityManagerException
      */
-    public function mapSingle(): \EntityManager\Entity
+    public function mapSingle(): Entity
     {
         $this->processCollectionToEntity($this->collection, $this->entity);
         return !empty($this->mapped) ? $this->mapped[0] : $this->entity;
     }
 
     /**
+     * Bind collection property with entity properties
+     *
      * @param ArrayCollection|array $collection
      * @param Entity $entity
-     * @throws \Doctrine\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws EntityManagerException
      */
-    private function processCollectionToEntity($collection, Entity $entity)
+    private function processCollectionToEntity($collection, Entity $entity): void
     {
         $object = null;
         if ($collection instanceof ArrayCollection) {
@@ -199,18 +203,18 @@ final class EntityMapper
      * @param Mapper $mapper
      * @return EntityMapper
      */
-    public function setSubMapper(string $property, Mapper $mapper): EntityMapper
+    public function setNestedMapper(string $property, Mapper $mapper): EntityMapper
     {
-        $this->subMapper[$property] = $mapper;
+        $this->nestedMapper[$property] = $mapper;
         return $this;
     }
 
     /**
-     * @param \ReflectionProperty $property
+     * @param ReflectionProperty $property
      * @param AnnotationReader $annotationReader
      * @return string
      */
-    private function getFieldName(\ReflectionProperty $property, AnnotationReader $annotationReader): string
+    private function getFieldName(ReflectionProperty $property, AnnotationReader $annotationReader): string
     {
         /** @var Property|null $annotation */
         $annotation = $annotationReader->getPropertyAnnotation($property, Property::class);
